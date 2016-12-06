@@ -1,0 +1,9 @@
+{
+  "name": "yamlserialized",
+  "authors": [
+    "Kjartan F. Kvamme"
+  ],
+  "description": "YAML serialization library for dyaml. Easily serialize/deserialize structs to/from YAML.",
+  "copyright": "Copyright © 2016, Forb.Jok",
+  "license": "MIT"
+}
