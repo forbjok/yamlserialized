@@ -143,6 +143,10 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
                 __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
             }
         }
+        else static if (isBoolean!FieldType) {
+            /* Convert to string first, then to the correct boolean type. */
+            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
+        }
         else {
             __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!FieldType;
         }

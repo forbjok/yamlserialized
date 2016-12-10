@@ -30,6 +30,8 @@ unittest {
         string[][] arrayOfStringArrays;
         string[string] stringAssocArray;
         string[string][string] stringAssocArrayOfAssocArrays;
+        bool trueBool;
+        bool falseBool;
 
         TestSubStruct subStruct;
         NestedStruct nestedStruct;
@@ -52,6 +54,8 @@ unittest {
         arrayOfStringArrays = [["a", "b"], ["c", "d"]];
         stringAssocArray = ["a": "A", "b": "B", "c": "C"];
         stringAssocArrayOfAssocArrays = ["a": ["a": "A", "b": "B"], "b": ["c": "C", "d": "D"]];
+        trueBool = true;
+        falseBool = false;
         subStruct.anotherInt = 42;
         subStruct.anotherString = "Another string";
         nestedStruct.nestedInt = 53;
@@ -82,6 +86,8 @@ unittest {
     assertEqual(ts2.arrayOfStringArrays, ts.arrayOfStringArrays);
     assertEqual(ts2.stringAssocArray, ts.stringAssocArray);
     assertEqual(ts2.stringAssocArrayOfAssocArrays, ts.stringAssocArrayOfAssocArrays);
+    assertEqual(ts2.trueBool, ts.trueBool);
+    assertEqual(ts2.falseBool, ts.falseBool);
     assertEqual(ts2.subStruct, ts.subStruct);
     assertEqual(ts2.subStruct.anotherInt, ts.subStruct.anotherInt);
     assertEqual(ts2.subStruct.anotherString, ts.subStruct.anotherString);
