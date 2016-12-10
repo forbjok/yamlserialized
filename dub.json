@@ -5,7 +5,7 @@
   ],
   "dependencies": {
     "dunit": "~>1.0.14",
-    "dyaml-yamlserialized": "~>0.5.6"
+    "dyaml-yamlserialized": "~>0.6.0"
   },
   "description": "YAML serialization library for dyaml. Easily serialize/deserialize structs to/from YAML.",
   "copyright": "Copyright © 2016, Kjartan F. Kvamme",
