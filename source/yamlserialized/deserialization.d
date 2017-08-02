@@ -3,7 +3,7 @@ module yamlserialized.deserialization;
 import std.conv;
 import std.traits;
 
-import yaml;
+import dyaml;
 
 void deserializeInto(T)(Node yamlNode, ref T array) if (isArray!T) {
     alias ElementType = ForeachType!T;

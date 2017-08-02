@@ -3,7 +3,7 @@ module yamlserialized.serialization;
 import std.conv;
 import std.traits;
 
-import yaml;
+import dyaml;
 
 @safe:
 
