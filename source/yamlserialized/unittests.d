@@ -3,7 +3,7 @@ module yamlserialized.unittests;
 unittest {
     import std.conv : to;
     import dunit.toolkit;
-    import yaml;
+    import dyaml;
 
     import yamlserialized : deserializeInto, deserializeTo, toYAMLNode;
 
@@ -122,7 +122,7 @@ unittest {
 
 unittest {
     import dunit.toolkit;
-    import yaml;
+    import dyaml;
 
     import yamlserialized : deserializeInto, toYAMLNode;
 
@@ -214,7 +214,7 @@ unittest {
 unittest {
     import std.conv : to;
     import dunit.toolkit;
-    import yaml;
+    import dyaml;
 
     import yamlserialized : deserializeInto;
 
