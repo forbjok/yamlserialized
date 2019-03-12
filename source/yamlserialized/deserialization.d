@@ -114,15 +114,11 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
                 yamlNode[fieldName].deserializeInto(__traits(getMember, obj, fieldName));
             }
         }
-        else static if (isSomeChar!FieldType) {
-            // Field is a char
+        else static if (isSomeChar!FieldType || isSomeString!FieldType) {
+            // Field is a char, char array or string
             /* Node.as!char fails for some reason, so we have to retrieve it as a string first
                and then convert it to the correct type. */
             __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
-        }
-        else static if (isSomeString!FieldType) {
-            // Field is a string
-            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!FieldType;
         }
         else static if (isArray!FieldType) {
             // Field is an array
