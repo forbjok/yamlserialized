@@ -19,6 +19,7 @@ unittest {
         }
 
         int singleInt;
+        float singleFloat;
         int[] intArray;
         int[][] arrayOfIntArrays;
         int[string] intStringAssocArray;
@@ -43,6 +44,7 @@ unittest {
     TestStruct ts;
     with (ts) {
         singleInt = 1234;
+        singleFloat = 1.234;
         intArray = [1, 2, 3, 4];
         arrayOfIntArrays = [[1, 2], [3, 4]];
         intStringAssocArray = ["one": 1, "two": 2, "three": 3];
@@ -75,6 +77,7 @@ unittest {
 
     // Assert that both structs are identical
     assertEqual(ts2.singleInt, ts.singleInt);
+    assertEqual(ts2.singleFloat, ts.singleFloat);
     assertEqual(ts2.intArray, ts.intArray);
     assertEqual(ts2.arrayOfIntArrays, ts.arrayOfIntArrays);
     assertEqual(ts2.intStringAssocArray, ts.intStringAssocArray);
@@ -128,21 +131,25 @@ unittest {
 
     class TestSubClass {
         int anotherInt;
+        float anotherFloat;
     }
 
     class TestClass {
         static class NestedClass {
             int nestedInt;
+            float nestedFloat;
 
             pure this() {
             }
 
-            this(in int initInt) {
+            this(in int initInt, in float initFloat) {
                 nestedInt = initInt;
+                nestedFloat = initFloat;
             }
         }
 
         int singleInt;
+        float singleFloat;
         int[] intArray;
         int[][] arrayOfIntArrays;
         int[string] intStringAssocArray;
@@ -158,13 +165,14 @@ unittest {
         NestedClass[string] nestedClassAssocArray;
 
         auto subClass = new TestSubClass();
-        auto nestedClass = new NestedClass(53);
+        auto nestedClass = new NestedClass(53, 5.3);
     }
 
     // Create test struct and set it up with some test values
     auto tc = new TestClass();
     with (tc) {
         singleInt = 1234;
+        singleFloat = 1.234;
         intArray = [1, 2, 3, 4];
         arrayOfIntArrays = [[1, 2], [3, 4]];
         intStringAssocArray = ["one": 1, "two": 2, "three": 3];
@@ -176,9 +184,10 @@ unittest {
         arrayOfStringArrays = [["a", "b"], ["c", "d"]];
         stringAssocArray = ["a": "A", "b": "B", "c": "C"];
         stringAssocArrayOfAssocArrays = ["a": ["a": "A", "b": "B"], "b": ["c": "C", "d": "D"]];
-        arrayOfNestedClasses = [new NestedClass(1), new NestedClass(2)];
-        nestedClassAssocArray = ["one": new NestedClass(1), "two": new NestedClass(2)];
+        arrayOfNestedClasses = [new NestedClass(1, 1.2), new NestedClass(2, 2.3)];
+        nestedClassAssocArray = ["one": new NestedClass(1, 1.2), "two": new NestedClass(2, 2.3)];
         subClass.anotherInt = 42;
+        subClass.anotherFloat = 4.2;
     }
 
     // Serialize the struct to a Node
@@ -192,6 +201,7 @@ unittest {
 
     // Assert that both structs are identical
     assertEqual(tc2.singleInt, tc.singleInt);
+    assertEqual(tc2.singleFloat, tc.singleFloat);
     assertEqual(tc2.intArray, tc.intArray);
     assertEqual(tc2.arrayOfIntArrays, tc.arrayOfIntArrays);
     assertEqual(tc2.intStringAssocArray, tc.intStringAssocArray);
@@ -204,11 +214,17 @@ unittest {
     assertEqual(tc2.stringAssocArray, tc.stringAssocArray);
     assertEqual(tc2.stringAssocArrayOfAssocArrays, tc.stringAssocArrayOfAssocArrays);
     assertEqual(tc2.subClass.anotherInt, tc.subClass.anotherInt);
+    assertEqual(tc2.subClass.anotherFloat, tc.subClass.anotherFloat);
     assertEqual(tc2.nestedClass.nestedInt, tc.nestedClass.nestedInt);
+    assertEqual(tc2.nestedClass.nestedFloat, tc.nestedClass.nestedFloat);
     assertEqual(tc2.arrayOfNestedClasses[0].nestedInt, tc.arrayOfNestedClasses[0].nestedInt);
+    assertEqual(tc2.arrayOfNestedClasses[0].nestedFloat, tc.arrayOfNestedClasses[0].nestedFloat);
     assertEqual(tc2.arrayOfNestedClasses[1].nestedInt, tc.arrayOfNestedClasses[1].nestedInt);
+    assertEqual(tc2.arrayOfNestedClasses[1].nestedFloat, tc.arrayOfNestedClasses[1].nestedFloat);
     assertEqual(tc2.nestedClassAssocArray["one"].nestedInt, tc.nestedClassAssocArray["one"].nestedInt);
+    assertEqual(tc2.nestedClassAssocArray["one"].nestedFloat, tc.nestedClassAssocArray["one"].nestedFloat);
     assertEqual(tc2.nestedClassAssocArray["two"].nestedInt, tc.nestedClassAssocArray["two"].nestedInt);
+    assertEqual(tc2.nestedClassAssocArray["two"].nestedFloat, tc.nestedClassAssocArray["two"].nestedFloat);
 }
 
 unittest {
