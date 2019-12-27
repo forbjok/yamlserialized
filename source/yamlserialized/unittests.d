@@ -2,8 +2,8 @@ module yamlserialized.unittests;
 
 unittest {
     import std.conv : to;
-    import dunit.toolkit;
-    import dyaml;
+    import dunit.toolkit : assertEqual;
+    import dyaml : Loader;
 
     import yamlserialized : deserializeInto, deserializeTo, toYAMLNode;
 
@@ -124,8 +124,8 @@ unittest {
 
 
 unittest {
-    import dunit.toolkit;
-    import dyaml;
+    import dunit.toolkit : assertEqual;
+    import dyaml : Loader;
 
     import yamlserialized : deserializeInto, toYAMLNode;
 
