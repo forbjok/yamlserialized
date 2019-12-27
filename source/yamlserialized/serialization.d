@@ -7,6 +7,7 @@ import dyaml;
 
 @safe:
 
+/// Convert an array of type T to a D-YAML Node
 Node toYAMLNode(T)(in ref T array) if (isArray!T) {
     alias ElementType = ForeachType!T;
 
@@ -39,6 +40,7 @@ Node toYAMLNode(T)(in ref T array) if (isArray!T) {
     return Node(nodes);
 }
 
+/// Convert an associative array of type T to a D-YAML Node
 Node toYAMLNode(T)(in ref T associativeArray) if (isAssociativeArray!T) {
     alias KType = KeyType!T;
     alias VType = ValueType!T;
@@ -76,6 +78,7 @@ Node toYAMLNode(T)(in ref T associativeArray) if (isAssociativeArray!T) {
     return Node(items);
 }
 
+/// Convert a struct or class of type T to a D-YAML Node
 Node toYAMLNode(T)(in ref T obj) if (is(T == struct) || is(T == class)) {
     enum fieldNames = FieldNameTuple!T;
 

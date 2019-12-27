@@ -5,6 +5,7 @@ import std.traits;
 
 import dyaml;
 
+/// Deserialize a D-YAML Node into an array T
 void deserializeInto(T)(Node yamlNode, ref T array) if (isArray!T) {
     alias ElementType = ForeachType!T;
 
@@ -46,6 +47,7 @@ void deserializeInto(T)(Node yamlNode, ref T array) if (isArray!T) {
     }
 }
 
+/// Deserialize a D-YAML Node into an associative array T
 void deserializeInto(T)(Node yamlNode, ref T associativeArray) if (isAssociativeArray!T) {
     alias VType = ValueType!T;
 
@@ -94,6 +96,7 @@ void deserializeInto(T)(Node yamlNode, ref T associativeArray) if (isAssociative
     }
 }
 
+/// Deserialize a D-YAML Node into a struct or class of type T
 void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T == class)) {
     enum fieldNames = FieldNameTuple!T;
 
@@ -153,6 +156,7 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
     }
 }
 
+/// Deserialize a D-YAML Node into a struct of type T
 T deserializeTo(T)(Node yamlNode) if (is(T == struct)) {
     T obj;
 
