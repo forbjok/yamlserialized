@@ -4,10 +4,10 @@
     "Kjartan F. Kvamme"
   ],
   "dependencies": {
-    "dunit": "~>1.0.14",
-    "dyaml": "~>0.7.1"
+    "dunit": "~>1.0.15",
+    "dyaml": "~>0.8.0"
   },
   "description": "YAML serialization library for dyaml. Easily serialize/deserialize structs to/from YAML.",
-  "copyright": "Copyright © 2016, Kjartan F. Kvamme",
+  "copyright": "Copyright © 2016-2019, Kjartan F. Kvamme",
   "license": "MIT"
 }

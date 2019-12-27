@@ -95,8 +95,8 @@ Node toYAMLNode(T)(in ref T obj) if (is(T == struct) || is(T == class)) {
                 nodes[fieldName] = field.toYAMLNode();
             }
         }
-        else static if (isSomeString!FieldType) {
-            // TODO: Because Node only seems to work with string strings (and not char[], etc), convert all string types to string
+        else static if (isSomeChar!FieldType || isSomeString!FieldType) {
+            // Because Node only seems to work with string strings (and not char[], etc), convert all string types to string
             nodes[fieldName] = Node(field.to!string);
         }
         else static if (isArray!FieldType) {
@@ -108,8 +108,7 @@ Node toYAMLNode(T)(in ref T obj) if (is(T == struct) || is(T == class)) {
             nodes[fieldName] = field.toYAMLNode();
         }
         else {
-            // TODO: Verify if this is correct
-            nodes[fieldName] = Node(field.to!string);
+            nodes[fieldName] = Node(field.to!FieldType);
         }
     }
 

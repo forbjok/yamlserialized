@@ -114,10 +114,14 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
                 yamlNode[fieldName].deserializeInto(__traits(getMember, obj, fieldName));
             }
         }
-        else static if (isSomeChar!FieldType || isSomeString!FieldType) {
-            // Field is a char, char array or string
-            /* Node.as!char fails for some reason, so we have to retrieve it as a string first
-               and then convert it to the correct type. */
+        else static if (isSomeChar!FieldType) {
+            // Field is a char
+            // Node.as!char fails for some reason, so we have to retrieve it as a string first
+            // and then convert it to the correct type.
+            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
+        }
+        else static if (isSomeString!FieldType) {
+            // Field is a string
             __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
         }
         else static if (isArray!FieldType) {
@@ -130,7 +134,7 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
         }
         else static if (isIntegral!FieldType) {
             // Field is an integer
-            if (yamlNode[fieldName].isInt) {
+            if (yamlNode[fieldName].convertsTo!FieldType) {
                 // If node contains an integer value, get it directly
                 __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!FieldType;
             }
@@ -140,7 +144,7 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
             }
         }
         else static if (isBoolean!FieldType) {
-            /* Convert to string first, then to the correct boolean type. */
+            // Convert to string first, then to the correct boolean type.
             __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
         }
         else {
