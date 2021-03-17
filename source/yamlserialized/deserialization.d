@@ -3,6 +3,8 @@ module yamlserialized.deserialization;
 import std.conv;
 import std.traits;
 
+import yamlserialized.types;
+
 import dyaml;
 
 /// Deserialize a D-YAML Node into an array T
@@ -103,55 +105,61 @@ void deserializeInto(T)(Node yamlNode, ref T obj) if (is(T == struct) || is(T ==
     foreach(fieldName; fieldNames) {
         alias FieldType = typeof(__traits(getMember, obj, fieldName));
 
-        if (!yamlNode.containsKey(fieldName)) {
+        auto yamlFieldName = fieldName;
+
+        static if (hasUDA!(__traits(getMember, obj, fieldName), YamlField)) {
+            yamlFieldName = getUDAs!(__traits(getMember, obj, fieldName), YamlField)[0].name;
+        }
+
+        if (!yamlNode.containsKey(yamlFieldName)) {
             continue;
         }
 
         static if (is(FieldType == struct)) {
             // This field is a struct - recurse into it
-            yamlNode[fieldName].deserializeInto(__traits(getMember, obj, fieldName));
+            yamlNode[yamlFieldName].deserializeInto(__traits(getMember, obj, fieldName));
         }
         else static if (is(FieldType == class)) {
             // This field is a class - recurse into it unless it is null
             if (__traits(getMember, obj, fieldName) !is null) {
-                yamlNode[fieldName].deserializeInto(__traits(getMember, obj, fieldName));
+                yamlNode[yamlFieldName].deserializeInto(__traits(getMember, obj, fieldName));
             }
         }
         else static if (isSomeChar!FieldType) {
             // Field is a char
             // Node.as!char fails for some reason, so we have to retrieve it as a string first
             // and then convert it to the correct type.
-            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
+            __traits(getMember, obj, fieldName) = yamlNode[yamlFieldName].as!string.to!FieldType;
         }
         else static if (isSomeString!FieldType) {
             // Field is a string
-            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
+            __traits(getMember, obj, fieldName) = yamlNode[yamlFieldName].as!string.to!FieldType;
         }
         else static if (isArray!FieldType) {
             // Field is an array
-            yamlNode[fieldName].deserializeInto(__traits(getMember, obj, fieldName));
+            yamlNode[yamlFieldName].deserializeInto(__traits(getMember, obj, fieldName));
         }
         else static if (isAssociativeArray!FieldType) {
             // Field is an associative array
-            yamlNode[fieldName].deserializeInto(__traits(getMember, obj, fieldName));
+            yamlNode[yamlFieldName].deserializeInto(__traits(getMember, obj, fieldName));
         }
         else static if (isIntegral!FieldType) {
             // Field is an integer
-            if (yamlNode[fieldName].convertsTo!FieldType) {
+            if (yamlNode[yamlFieldName].convertsTo!FieldType) {
                 // If node contains an integer value, get it directly
-                __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!FieldType;
+                __traits(getMember, obj, fieldName) = yamlNode[yamlFieldName].as!FieldType;
             }
             else {
                 // If node contains a non-integer value, convert it to a string first and then to the correct type
-                __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
+                __traits(getMember, obj, fieldName) = yamlNode[yamlFieldName].as!string.to!FieldType;
             }
         }
         else static if (isBoolean!FieldType) {
             // Convert to string first, then to the correct boolean type.
-            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!string.to!FieldType;
+            __traits(getMember, obj, fieldName) = yamlNode[yamlFieldName].as!string.to!FieldType;
         }
         else {
-            __traits(getMember, obj, fieldName) = yamlNode[fieldName].as!FieldType;
+            __traits(getMember, obj, fieldName) = yamlNode[yamlFieldName].as!FieldType;
         }
     }
 }

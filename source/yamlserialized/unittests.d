@@ -1,6 +1,28 @@
 module yamlserialized.unittests;
 
 unittest {
+    import yamlserialized : YamlField, toYAMLNode, deserializeInto;
+    import dunit.toolkit : assertEqual;
+
+    struct Test {
+        @YamlField("some_field")
+        string someField;
+    }
+
+    Test ts = Test("hello world");
+
+    auto node = ts.toYAMLNode();
+
+    assertEqual(node["some_field"], "hello world");
+
+    Test ts1;
+
+    node.deserializeInto(ts1);
+
+    assertEqual(ts1.someField, "hello world");
+}
+
+unittest {
     import std.conv : to;
     import dunit.toolkit : assertEqual;
     import dyaml : Loader;

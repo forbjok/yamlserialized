@@ -3,6 +3,8 @@ module yamlserialized.serialization;
 import std.conv;
 import std.traits;
 
+import yamlserialized.types;
+
 import dyaml;
 
 @safe:
@@ -86,32 +88,39 @@ Node toYAMLNode(T)(in ref T obj) if (is(T == struct) || is(T == class)) {
 
     foreach(fieldName; fieldNames) {
         auto field = __traits(getMember, obj, fieldName);
+
+        auto yamlFieldName = fieldName;
+
+        static if (hasUDA!(__traits(getMember, obj, fieldName), YamlField)) {
+            yamlFieldName = getUDAs!(__traits(getMember, obj, fieldName), YamlField)[0].name;
+        }
+
         alias FieldType = typeof(field);
 
         static if (is(FieldType == struct)) {
             // This field is a struct - recurse into it
-            nodes[fieldName] = field.toYAMLNode();
+            nodes[yamlFieldName] = field.toYAMLNode();
         }
         else static if (is(FieldType == class)) {
             // This field is a class - recurse into it unless it is null
             if (field !is null) {
-                nodes[fieldName] = field.toYAMLNode();
+                nodes[yamlFieldName] = field.toYAMLNode();
             }
         }
         else static if (isSomeChar!FieldType || isSomeString!FieldType) {
             // Because Node only seems to work with string strings (and not char[], etc), convert all string types to string
-            nodes[fieldName] = Node(field.to!string);
+            nodes[yamlFieldName] = Node(field.to!string);
         }
         else static if (isArray!FieldType) {
             // Field is an array
-            nodes[fieldName] = field.toYAMLNode();
+            nodes[yamlFieldName] = field.toYAMLNode();
         }
         else static if (isAssociativeArray!FieldType) {
             // Field is an associative array
-            nodes[fieldName] = field.toYAMLNode();
+            nodes[yamlFieldName] = field.toYAMLNode();
         }
         else {
-            nodes[fieldName] = Node(field.to!FieldType);
+            nodes[yamlFieldName] = Node(field.to!FieldType);
         }
     }
 
