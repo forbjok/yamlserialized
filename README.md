@@ -4,17 +4,20 @@ YAML serialization library for D:YAML. Easily serialize/deserialize structs and 
 
 ## How to use
 ```D
-import yamlserialized : deserializeInto, toYAMLNode;
+import yamlserialized : deserializeInto, toYAMLNode, YamlField;
 
 struct MyStruct {
-	int intField;
-	string stringField;
+  int intField;
+  string stringField;
+  @YamlField("renamed_field")
+  string renamedField;
 }
 
 MyStruct st;
 
 st.intField = 42;
 st.stringField = "Don't panic.";
+st.renamedField = "Don't panic but in snake case."
 
 // Serialize the struct to a D:YAML Node
 auto node = st.toYAMLNode();
