@@ -4,6 +4,31 @@ unittest {
     import yamlserialized : YamlField, toYAMLNode, deserializeInto;
     import dunit.toolkit : assertEqual;
 
+    class Test {
+        @YamlField("some_field")
+        string someField;
+
+        public this() {
+            Test ts = new Test("something other");
+            auto node = ts.toYAMLNode();
+
+            node.deserializeInto(this);
+        }
+
+        public this(string f) {
+            this.someField = f;
+        }
+    }
+
+    Test ts1 = new Test();
+
+    assertEqual(ts1.someField, "something other");
+}
+
+unittest {
+    import yamlserialized : YamlField, toYAMLNode, deserializeInto;
+    import dunit.toolkit : assertEqual;
+
     struct Test {
         @YamlField("some_field")
         string someField;
